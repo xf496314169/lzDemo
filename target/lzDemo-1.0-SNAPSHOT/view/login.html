@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>登录</title>
+    <link rel="stylesheet" href="statics/element/index.css">
+</head>
+<body>
+<div id="app">
+<center>
+    <el-form :model="userForm" ref="userValidateForm" class="demo-dynamic">
+        <el-form-item style="width: 300px;"label="用户名">
+            <el-input   v-model="user.username"></el-input>
+        </el-form-item>
+        <el-form-item style="width: 300px;" label="密码">
+            <el-input type="password"v-model="user.password"></el-input>
+        </el-form-item>
+        <el-form-item>
+            <el-button type="primary" @click="loginUser">登录</el-button>
+            <el-button type="danger" @click="clearFrom">重置</el-button>
+        </el-form-item></el-row>
+    </el-form>
+</center>
+</div>
+</body>
+<script src="statics/vue/vue-2.5.16.js"></script>
+<script src="statics/jquery/jquery-1.7.2.min.js"></script>
+<script src="statics/element/index.js"></script>
+<script>
+    var vue=new Vue({
+        el: '#app',
+        data: function () {
+            return {
+              user:{}
+            }
+            },
+        methods:{
+            loginUser:function () {
+                $.ajax({
+                    type:"post",
+                    contentType: "application/json;charset=UTF-8",
+                    url: "/login",
+                    data:JSON.stringify(this.user),
+                    success: function(result){
+                         alert(result.message);
+                         if(result.flag){
+                             window.location.href='index.html';
+                         }
+                    }
+                });
+            }
+        }
+
+        })
+</script>
+</html>

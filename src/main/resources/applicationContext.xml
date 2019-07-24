@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="   
+            http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd   
+            http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd   
+            http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd 
+            http://www.springframework.org/schema/context 
+            http://www.springframework.org/schema/context/spring-context.xsd">
+ <context:property-placeholder location="classpath:dbcp.properties"/>
+
+	<context:component-scan base-package="com.demo.service"></context:component-scan>
+	<bean id="datasouce" class="com.alibaba.druid.pool.DruidDataSource">
+		<property name="driverClassName" value="${driver1}"></property>
+		<property name="url" value="${url1}"></property>
+		<property name="username" value="${username1}"></property>
+		<property name="password" value="${password1}"></property>
+	</bean>
+		<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<!-- 数据库连接池 -->
+		<property name="dataSource" ref="datasouce" />
+		<!-- 加载mybatis的全局配置文件 -->
+		<property name="configLocation" value="classpath:mybatis-config.xml" />
+		
+	</bean>
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.demo.dao" />
+		
+	</bean> 
+
+
+	<bean id="txTransactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="datasouce"></property>
+	</bean>
+
+
+	<tx:annotation-driven transaction-manager="txTransactionManager" />
+	<aop:aspectj-autoproxy proxy-target-class="false" />
+</beans> 
